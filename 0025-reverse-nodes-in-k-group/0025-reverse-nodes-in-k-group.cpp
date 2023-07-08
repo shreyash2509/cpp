@@ -3,28 +3,38 @@ public:
     ListNode* reverseKGroup(ListNode* head, int k) {
         ListNode* dummy = new ListNode();
         dummy->next = head;
-        ListNode* prev = dummy;
-        ListNode* curr = head;
+        ListNode* prevGroupTail = dummy;
         int len = 0;
-        
-        // Count the number of nodes in the list
-        while (head) {
+        ListNode* curr = head;
+        while (curr) {
             len++;
-            head = head->next;
-        }
-        
-        // Reverse in groups of size k
-        for (int i = 0; i < len / k; i++) {
-            for (int j = 0; j < k - 1; j++) {
-                ListNode* next = curr->next;
-                curr->next = next->next;
-                next->next = prev->next;
-                prev->next = next;
-            }
-            prev = curr;
             curr = curr->next;
         }
-        
+        for (int i = 0; i < len / k; i++) {
+            ListNode* currGroupHead = prevGroupTail->next;
+            ListNode* currGroupTail = currGroupHead;
+            ListNode* nextGroupHead = nullptr;
+
+            for (int j = 0; j < k - 1; j++) {
+                currGroupTail = currGroupTail->next;
+            }
+
+            nextGroupHead = currGroupTail->next;
+
+            ListNode* prev = nullptr;
+            curr = currGroupHead;
+            while (curr != nextGroupHead) {
+                ListNode* next = curr->next;
+                curr->next = prev;
+                prev = curr;
+                curr = next;
+            }
+
+            prevGroupTail->next = currGroupTail;
+            currGroupHead->next = nextGroupHead;
+            prevGroupTail = currGroupHead;
+        }
+
         ListNode* newHead = dummy->next;
         delete dummy;
         return newHead;
