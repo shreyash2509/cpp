@@ -1,33 +1,55 @@
 class Solution {
 public:
     int romanToInt(string s) {
-        unordered_map<char, int> m = {
-            {'I', 1},
-            {'V', 5},
-            {'X', 10},
-            {'L', 50},
-            {'C', 100},
-            {'D', 500},
-            {'M', 1000}
-        };
-        
-        int ans = 0;
-        int n = s.length();
-        
-        for (int i = 0; i < n - 1; i++) {
-            int current = m[s[i]];
-            int next = m[s[i+1]];
-            
-            if (current < next) {
-                ans -= current;
-            } else {
-                ans += current;
+        int ans=0;
+        for(int i=0;i<s.size();i++){
+            if(s[i]=='M'){
+                ans+=1000;
             }
+            else if(s[i]=='D'){
+                ans+=500;
+            }
+            else if(s[i]=='C'){
+                ans+=100;
+                if(s[i+1]=='D'){
+                    ans+=300;
+                    i++;
+                }
+                else if(s[i+1]=='M'){
+                    ans+=800;
+                    i++;
+                }
+            }
+            else if(s[i]=='L'){
+                ans+=50;
+            }
+            else if(s[i]=='X'){
+                ans+=10;
+                if(s[i+1]=='L'){
+                    ans+=30;
+                    i++;
+                }
+                else if(s[i+1]=='C'){
+                    ans+=80;
+                    i++;
+                }
+            }
+            else if(s[i]=='V'){
+                ans+=5;
+            }
+            else{
+                ans+=1;
+                if(s[i+1]=='V'){
+                    ans+=3;
+                    i++;
+                }
+                else if(s[i+1]=='X'){
+                    ans+=8;
+                    i++;
+                }
+            }
+
         }
-        
-        // Add the value of the last character
-        ans += m[s[n-1]];
-        
         return ans;
     }
 };
