@@ -1,21 +1,25 @@
 class Solution {
 public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        sort(intervals.begin(), intervals.end());
+    vector<vector<int>> merge(vector<vector<int>>& arr) {
+        int n = arr.size(); // size of the array
 
-        vector<vector<int>> merged;
-        for (auto interval : intervals) {
-            // if the list of merged intervals is empty or if the current
-            // interval does not overlap with the previous, simply append it.
-            if (merged.empty() || merged.back()[1] < interval[0]) {
-                merged.push_back(interval);
-            }
-            // otherwise, there is overlap, so we merge the current and previous
-            // intervals.
-            else {
-                merged.back()[1] = max(merged.back()[1], interval[1]);
-            }
+    //sort the given intervals:
+    sort(arr.begin(), arr.end());
+
+    vector<vector<int>> ans;
+
+    for (int i = 0; i < n; i++) {
+        // if the current interval does not
+        // lie in the last interval:
+        if (ans.empty() || arr[i][0] > ans.back()[1]) {
+            ans.push_back(arr[i]);
         }
-        return merged;
+        // if the current interval
+        // lies in the last interval:
+        else {
+            ans.back()[1] = max(ans.back()[1], arr[i][1]);
+        }
+    }
+    return ans;
     }
 };
